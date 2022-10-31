@@ -1,0 +1,13 @@
+﻿
++-
+*
+<=
+hola adios
+<*
+<
+=
+a := int 5
+int b := 3
+float x := 56.7
+'Hola!'
+<>
