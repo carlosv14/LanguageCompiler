@@ -38,6 +38,8 @@ namespace LanguageCompiler.Lexer
         StringKeyword,
         Colon,
         WhileKeyword,
-        PrintKeyword
+        PrintKeyword,
+        LogicalOr,
+        LogicalAnd
     }
 }

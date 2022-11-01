@@ -1,13 +1,11 @@
-﻿
-+-
-*
-<=
-hola adios
-<*
-<
-=
-a := int 5
-int b := 3
-float x := 56.7
-'Hola!'
-<>
+﻿{
+a:int;
+b:float;
+while(a>0){
+    print('test');
+    if(b = 0){
+        a := b + 1;
+    }
+}
+
+}

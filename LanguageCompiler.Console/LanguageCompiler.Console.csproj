@@ -9,11 +9,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LanguageCompiler.Lexer\LanguageCompiler.Lexer.csproj" />
+    <ProjectReference Include="..\LanguageCompiler.Parser\LanguageCompiler.Parser.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <None Update="Code.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 

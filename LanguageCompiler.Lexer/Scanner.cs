@@ -139,9 +139,6 @@ namespace LanguageCompiler.Lexer
                         case '(':
                             lexeme.Append(currentChar);
                             return lexeme.ToToken(input, TokenType.LeftParens);
-                        case ':':
-                            lexeme.Append(currentChar);
-                            return lexeme.ToToken(input, TokenType.Colon);
                         case ')':
                             lexeme.Append(currentChar);
                             return lexeme.ToToken(input, TokenType.RightParens);
@@ -157,11 +154,13 @@ namespace LanguageCompiler.Lexer
                         case ':':
                             {
                                 lexeme.Append(currentChar);
-                                currentChar = GetNextChar();
+                                currentChar = PeekNextChar();
                                 if (currentChar != '=')
                                 {
-                                    throw new ApplicationException($"Caracter {lexeme} invalido en la columna: {input.Position.Column}, fila: {input.Position.Line}");
+                                    return lexeme.ToToken(input, TokenType.Colon);
                                 }
+
+                                currentChar = GetNextChar();
                                 lexeme.Append(currentChar);
                                 return lexeme.ToToken(input, TokenType.Assignation);
                             }
