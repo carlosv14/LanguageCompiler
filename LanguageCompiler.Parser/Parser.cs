@@ -58,17 +58,7 @@ namespace LanguageCompiler.Parser
                     PrintStatement();
                     break;
                 case TokenType.IfKeyword:
-                    this.Match(TokenType.IfKeyword);
-                    this.Match(TokenType.LeftParens);
-                    LogicalOrExpr();
-                    this.Match(TokenType.RightParens);
-                    Stmt();
-                    if (this.lookAhead.TokenType != TokenType.ElseKeyword)
-                    {
-                        break;
-                    }
-                    this.Match(TokenType.ElseKeyword);
-                    Stmt();
+                    IfStatement();
                     break;
                 default:
                     Block();
@@ -78,7 +68,17 @@ namespace LanguageCompiler.Parser
 
         private void IfStatement()
         {
-            throw new NotImplementedException();
+            this.Match(TokenType.IfKeyword);
+            this.Match(TokenType.LeftParens);
+            LogicalOrExpr();
+            this.Match(TokenType.RightParens);
+            Stmt();
+            if (this.lookAhead.TokenType != TokenType.ElseKeyword)
+            {
+                return;
+            }
+            this.Match(TokenType.ElseKeyword);
+            Stmt();
         }
 
         private void PrintStatement()
@@ -153,7 +153,6 @@ namespace LanguageCompiler.Parser
                    this.lookAhead.TokenType == TokenType.GreaterThan ||
                    this.lookAhead.TokenType == TokenType.GreaterOrEqualThan)
             {
-                var token = this.lookAhead;
                 Move();
                 Expr();
             }
