@@ -25,6 +25,10 @@ namespace LanguageCompiler.Parser
         private void Block()
         {
             Match(TokenType.OpenBrace);
+            if (this.lookAhead.TokenType == TokenType.Identifier)
+            {
+                this.Match(TokenType.Identifier);
+            }
             Decls();
             Stmts();
             Match(TokenType.CloseBrace);
@@ -49,6 +53,7 @@ namespace LanguageCompiler.Parser
             switch (this.lookAhead.TokenType)
             {
                 case TokenType.Assignation:
+                case TokenType.Identifier:
                     AssignationStatement();
                     break;
                 case TokenType.WhileKeyword:
@@ -206,14 +211,18 @@ namespace LanguageCompiler.Parser
         }
         private void AssignationStatement()
         {
-            Match(TokenType.Identifier);
+            if (this.lookAhead.TokenType == TokenType.Identifier)
+            {
+                Match(TokenType.Identifier);
+            }
             Match(TokenType.Assignation);
             LogicalOrExpr();
+            this.Match(TokenType.SemiColon);
         }
 
         private void Decls()
         {
-            if (this.lookAhead.TokenType == TokenType.Identifier)
+            if (this.lookAhead.TokenType == TokenType.Colon)
             {
                 Decl();
                 Decls();
@@ -222,10 +231,13 @@ namespace LanguageCompiler.Parser
 
         private void Decl()
         {
-            Match(TokenType.Identifier);
             Match(TokenType.Colon);
             Type();
             Match(TokenType.SemiColon);
+            if (this.lookAhead.TokenType == TokenType.Identifier)
+            {
+                this.Match(TokenType.Identifier);
+            }
         }
 
         private void Type()
