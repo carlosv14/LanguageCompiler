@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using LanguageCompiler.Core;
 
 namespace LanguageCompiler.Lexer
 {

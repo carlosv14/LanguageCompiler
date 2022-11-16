@@ -7,4 +7,5 @@ var scanner = new Scanner(input);
 
 var parser = new Parser(scanner);
 
-parser.Parse();
+var ast = parser.Parse();
+ast.ValidateSemantic();

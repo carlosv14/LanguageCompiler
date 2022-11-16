@@ -1,4 +1,6 @@
-﻿namespace LanguageCompiler.Lexer
+﻿using LanguageCompiler.Core;
+
+namespace LanguageCompiler.Lexer
 {
     public interface IScanner
     {
