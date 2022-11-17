@@ -29,14 +29,16 @@ namespace LanguageCompiler.Parser
         {
             IdExpression id = null;
             Match(TokenType.OpenBrace);
+            ContextManager.Push();
             if (this.lookAhead.TokenType == TokenType.Identifier)
             {
                 id = new IdExpression(this.lookAhead.Lexeme, null);
                 this.Match(TokenType.Identifier);
             }
-            Decls();
+            Decls(ref id);
             var statements = Stmts(id);
             Match(TokenType.CloseBrace);
+            ContextManager.Pop();
             return statements;
         }
 
@@ -231,8 +233,9 @@ namespace LanguageCompiler.Parser
                     Match(TokenType.StringConstant);
                     return new ConstantExpression(ExpressionType.String, token);
                 default:
+                    token = this.lookAhead;
                     Match(TokenType.Identifier);
-                    break;
+                    return ContextManager.Get(token.Lexeme).Id;
             }
 
             return null;
@@ -249,39 +252,42 @@ namespace LanguageCompiler.Parser
             return new AssignationStatement(id, expression);
         }
 
-        private void Decls()
+        private void Decls(ref IdExpression id)
         {
             if (this.lookAhead.TokenType == TokenType.Colon)
             {
-                Decl();
-                Decls();
+                Decl(ref id);
+                Decls(ref id);
             }
         }
 
-        private void Decl()
+        private void Decl(ref IdExpression id)
         {
             Match(TokenType.Colon);
-            Type();
+            var type = Type();
             Match(TokenType.SemiColon);
+            id.Type = type;
+            ContextManager.Put(id.Name, id);
             if (this.lookAhead.TokenType == TokenType.Identifier)
             {
+                id = new IdExpression(this.lookAhead.Lexeme, null);
                 this.Match(TokenType.Identifier);
             }
         }
 
-        private void Type()
+        private ExpressionType Type()
         {
             switch (this.lookAhead.TokenType)
             {
                 case TokenType.FloatKeyword:
                     Match(TokenType.FloatKeyword);
-                    break;
+                    return ExpressionType.Float;
                 case TokenType.StringKeyword:
                     Match(TokenType.StringKeyword);
-                    break;
+                    return ExpressionType.String;
                 default:
                     Match(TokenType.IntKeyword);
-                    break;
+                    return ExpressionType.Int;
             }
         }
 

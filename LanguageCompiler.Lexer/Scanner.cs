@@ -188,6 +188,26 @@ namespace LanguageCompiler.Lexer
                         case ',':
                             lexeme.Append(currentChar);
                             return lexeme.ToToken(input, TokenType.Comma);
+                        case '&':
+                            lexeme.Append(currentChar);
+                            currentChar = PeekNextChar();
+                            if (currentChar != '&')
+                            {
+                                throw new ApplicationException($"Caracter {lexeme} invalido en la columna: {input.Position.Column}, fila: {input.Position.Line}");
+                            }
+                            currentChar = GetNextChar();
+                            lexeme.Append(currentChar);
+                            return lexeme.ToToken(input, TokenType.LogicalAnd);
+                        case '|':
+                            lexeme.Append(currentChar);
+                            currentChar = PeekNextChar();
+                            if (currentChar != '|')
+                            {
+                                throw new ApplicationException($"Caracter {lexeme} invalido en la columna: {input.Position.Column}, fila: {input.Position.Line}");
+                            }
+                            currentChar = GetNextChar();
+                            lexeme.Append(currentChar);
+                            return lexeme.ToToken(input, TokenType.Comma);
                         default:
                             throw new ApplicationException($"Caracter {lexeme} invalido en la columna: {input.Position.Column}, fila: {input.Position.Line}");
                     }

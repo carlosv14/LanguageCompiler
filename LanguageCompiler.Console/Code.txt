@@ -2,10 +2,14 @@
 a:int;
 b:float;
 x: string;
-while(1>0){
-    print('test');
-    if('a' = 0){
-        
+o : int;
+while(o>0){
+    var: float;
+    print('hello');
+    if(a < 2 && var > 0){
+       print('bye');   
     }
+}
+if(a = 0){
 }
 }

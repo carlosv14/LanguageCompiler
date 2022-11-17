@@ -13,6 +13,6 @@ public class IdExpression : Expression
 
     public override ExpressionType GetType()
     {
-        throw new NotImplementedException();
+        return Type;
     }
 }

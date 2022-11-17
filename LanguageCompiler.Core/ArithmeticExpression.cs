@@ -23,7 +23,6 @@ public class ArithmeticExpression : BinaryExpression
             {(ExpressionType.Float, ExpressionType.Float, TokenType.Asterisk), ExpressionType.Float},
             {(ExpressionType.Float, ExpressionType.Float, TokenType.Division), ExpressionType.Float},
 
-            {(ExpressionType.Float, ExpressionType.Float, TokenType.Plus), ExpressionType.Float},
             {(ExpressionType.Int, ExpressionType.Float, TokenType.Plus), ExpressionType.Float},
             {(ExpressionType.Float, ExpressionType.Int, TokenType.Plus), ExpressionType.Float},
             
