@@ -3,13 +3,19 @@ a:int;
 b:float;
 x: string;
 o : int;
+isValid:bool;
+arr:array<int>(1);
 while(o>0){
     var: float;
+    a:= 55;
+    isValid := true || false;
+    arr[0] := 1;
+    arr[1] := 2;
     print('hello');
     if(a < 2 && var > 0){
        print('bye');   
     }
 }
-if(a = 0){
+if(isValid || arr[0] > 1){
 }
 }

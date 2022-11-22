@@ -40,6 +40,13 @@ namespace LanguageCompiler.Core
         WhileKeyword,
         PrintKeyword,
         LogicalOr,
-        LogicalAnd
+        LogicalAnd,
+        BoolKeyword,
+        FalseKeyword,
+        TrueKeyword,
+        ArrayKeyword,
+        ComplexType,
+        LeftBracket,
+        RightBracket
     }
 }

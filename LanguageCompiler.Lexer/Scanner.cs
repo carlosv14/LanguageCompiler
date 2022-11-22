@@ -20,6 +20,10 @@ namespace LanguageCompiler.Lexer
                 { "string", TokenType.StringKeyword },
                 { "while", TokenType.WhileKeyword },
                 { "print", TokenType.PrintKeyword },
+                { "bool", TokenType.BoolKeyword },
+                { "true", TokenType.TrueKeyword },
+                { "false", TokenType.FalseKeyword },
+                { "array", TokenType.ArrayKeyword}
             };
         }
 
@@ -188,6 +192,12 @@ namespace LanguageCompiler.Lexer
                         case ',':
                             lexeme.Append(currentChar);
                             return lexeme.ToToken(input, TokenType.Comma);
+                        case '[':
+                            lexeme.Append(currentChar);
+                            return lexeme.ToToken(input, TokenType.LeftBracket);
+                        case ']':
+                            lexeme.Append(currentChar);
+                            return lexeme.ToToken(input, TokenType.RightBracket);
                         case '&':
                             lexeme.Append(currentChar);
                             currentChar = PeekNextChar();
@@ -207,7 +217,7 @@ namespace LanguageCompiler.Lexer
                             }
                             currentChar = GetNextChar();
                             lexeme.Append(currentChar);
-                            return lexeme.ToToken(input, TokenType.Comma);
+                            return lexeme.ToToken(input, TokenType.LogicalOr);
                         default:
                             throw new ApplicationException($"Caracter {lexeme} invalido en la columna: {input.Position.Column}, fila: {input.Position.Line}");
                     }

@@ -59,6 +59,10 @@ namespace LanguageCompiler.Parser
 
         private Statement Stmt(IdExpression id)
         {
+            if (id != null)
+            {
+                id.Type = ContextManager.Get(id.Name).Id.Type;
+            }
             switch (this.lookAhead.TokenType)
             {
                 case TokenType.Assignation:
@@ -232,10 +236,27 @@ namespace LanguageCompiler.Parser
                     token = this.lookAhead;
                     Match(TokenType.StringConstant);
                     return new ConstantExpression(ExpressionType.String, token);
+                case TokenType.TrueKeyword:
+                    token = this.lookAhead;
+                    Match(TokenType.TrueKeyword);
+                    return new ConstantExpression(ExpressionType.Bool, token);
+                case TokenType.FalseKeyword:
+                    token = this.lookAhead;
+                    Match(TokenType.FalseKeyword);
+                    return new ConstantExpression(ExpressionType.Bool, token);
                 default:
                     token = this.lookAhead;
                     Match(TokenType.Identifier);
-                    return ContextManager.Get(token.Lexeme).Id;
+                    var id = ContextManager.Get(token.Lexeme).Id;
+                    if (id.Type is not ArrayType)
+                    {
+                        return id;
+                    }
+                    Match(TokenType.LeftBracket);
+                    var index = LogicalOrExpr();
+                    Match(TokenType.RightBracket);
+                    id.Type =  ((ArrayType)id.GetType()).Of;
+                    return id;
             }
 
             return null;
@@ -244,12 +265,27 @@ namespace LanguageCompiler.Parser
         {
             if (this.lookAhead.TokenType == TokenType.Identifier)
             {
+                id = ContextManager.Get(this.lookAhead.Lexeme).Id;
                 Match(TokenType.Identifier);
+            }
+            Expression index = null;
+            if (this.lookAhead.TokenType == TokenType.LeftBracket)
+            {
+                this.Match(TokenType.LeftBracket);
+                index = LogicalOrExpr();
+                this.Match(TokenType.RightBracket);
             }
             Match(TokenType.Assignation);
             var expression = LogicalOrExpr();
+            if (index == null)
+            {
+                this.Match(TokenType.SemiColon);
+                return new AssignationStatement(id, expression);
+            }
+            var type = ((ArrayType)id.GetType()).Of;
+            var access = new ArrayAccessExpression(type, this.lookAhead, id, index);
             this.Match(TokenType.SemiColon);
-            return new AssignationStatement(id, expression);
+            return new ArrayAssignationStatement(access, expression);
         }
 
         private void Decls(ref IdExpression id)
@@ -285,6 +321,19 @@ namespace LanguageCompiler.Parser
                 case TokenType.StringKeyword:
                     Match(TokenType.StringKeyword);
                     return ExpressionType.String;
+                case TokenType.BoolKeyword:
+                    Match(TokenType.BoolKeyword);
+                    return ExpressionType.Bool;
+                case TokenType.ArrayKeyword:
+                    this.Match(TokenType.ArrayKeyword);
+                    this.Match(TokenType.LessThan);
+                    var type = Type();
+                    this.Match(TokenType.GreaterThan);
+                    this.Match(TokenType.LeftParens);
+                    var size = this.lookAhead;
+                    this.Match(TokenType.IntConstant);
+                    this.Match(TokenType.RightParens);
+                    return new ArrayType("[]", TokenType.ComplexType, type, int.Parse(size.Lexeme));
                 default:
                     Match(TokenType.IntKeyword);
                     return ExpressionType.Int;

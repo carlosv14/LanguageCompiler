@@ -18,7 +18,6 @@ public class ExpressionType : IEquatable<ExpressionType>
     public static ExpressionType Float => new ExpressionType("float", LanguageCompiler.Core.TokenType.BasicType);
     public static ExpressionType String => new ExpressionType("string", LanguageCompiler.Core.TokenType.BasicType);
     public static ExpressionType Bool => new ExpressionType("bool", LanguageCompiler.Core.TokenType.BasicType);
-
     public bool Equals(ExpressionType? other)
     {
         if (ReferenceEquals(null, other))
