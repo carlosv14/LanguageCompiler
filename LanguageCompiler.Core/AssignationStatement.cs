@@ -21,4 +21,13 @@ public class AssignationStatement : Statement
             throw new ApplicationException($"Cannot convert source type '{exprType}' to {idType}");
         }
     }
+
+    public override string GenerateCode() =>
+        $"{this.Id.GenerateCode()} = {this.Expression.GenerateCode()};";
+
+    public override void Interpret()
+    {
+        var expressionValue = this.Expression.Evaluate();
+        ContextManager.UpdateSymbol(this.Id.Name, expressionValue);
+    }
 }

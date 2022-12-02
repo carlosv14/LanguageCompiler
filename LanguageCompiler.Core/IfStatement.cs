@@ -22,4 +22,30 @@ public class IfStatement : Statement
             throw new ApplicationException($"Cannot implicitly convert '{exprType}' to bool");
         }
     }
+
+    public override string GenerateCode()
+    {
+        var code =
+            $"if({this.Expression.GenerateCode()}){{{Environment.NewLine} {this.TrueStatement?.GenerateCode()} {Environment.NewLine} }}";
+        if (FalseStatement is null)
+        {
+            return code;
+        }
+
+        code += $"else {{{Environment.NewLine} {this.FalseStatement.GenerateCode()}  {Environment.NewLine}}}";
+        return code;
+    }
+
+    public override void Interpret()
+    {
+        var expr = this.Expression.Evaluate();
+        if (expr)
+        {
+            this.TrueStatement?.Interpret();
+        }
+        else
+        {
+            this.FalseStatement?.Interpret();
+        }
+    }
 }

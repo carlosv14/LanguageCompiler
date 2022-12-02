@@ -15,4 +15,10 @@ public class IdExpression : Expression
     {
         return Type;
     }
+
+    public override string GenerateCode() =>
+        this.Name;
+
+    public override dynamic Evaluate() =>
+        ContextManager.GetSymbolForInterpretation(this.Name).Value;
 }

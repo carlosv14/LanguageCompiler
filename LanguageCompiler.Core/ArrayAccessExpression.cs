@@ -9,7 +9,7 @@ public class ArrayAccessExpression : Expression
 
     public Expression Index { get; }
 
-    public ArrayAccessExpression(ExpressionType type, Token token, IdExpression id, Expression index)
+    public ArrayAccessExpression(ExpressionType type, IdExpression id, Expression index)
     {
         Type = type;
         Id = id;
@@ -19,5 +19,15 @@ public class ArrayAccessExpression : Expression
     public override ExpressionType GetType()
     {
         return Type;
+    }
+
+    public override string GenerateCode() =>
+        $"{this.Id.Name}[{this.Index.GenerateCode()}]";
+
+    public override dynamic Evaluate()
+    {
+        var symbol = this.Id.Evaluate();
+        var index = this.Index.Evaluate();
+        return symbol[(int) index];
     }
 }

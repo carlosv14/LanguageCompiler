@@ -24,10 +24,6 @@ public class ExpressionType : IEquatable<ExpressionType>
         {
             return false;
         }
-        if (ReferenceEquals(this, other))
-        {
-            return false;
-        }
 
         return Lexeme == other.Lexeme && TokenType == other.TokenType;
     }

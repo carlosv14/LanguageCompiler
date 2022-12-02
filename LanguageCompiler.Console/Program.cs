@@ -9,3 +9,5 @@ var parser = new Parser(scanner);
 
 var ast = parser.Parse();
 ast.ValidateSemantic();
+ast.Interpret();
+//File.WriteAllText("./genCode.txt", generatedCode);

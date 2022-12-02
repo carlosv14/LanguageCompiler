@@ -20,4 +20,15 @@ public class WhileStatement : Statement
             throw new ApplicationException($"Cannot implicitly convert '{exprType}' to bool");
         }
     }
+
+    public override string GenerateCode() =>
+        $"while({this.Expression.GenerateCode()}){{ {Environment.NewLine} {this.Statement.GenerateCode()} {Environment.NewLine}}}";
+
+    public override void Interpret()
+    {
+        while (this.Expression.Evaluate())
+        {
+            this.Statement?.Interpret();
+        }
+    }
 }

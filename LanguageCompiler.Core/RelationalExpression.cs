@@ -33,4 +33,24 @@ public class RelationalExpression : BinaryExpression
 
         throw new ApplicationException($"Cannot apply operator '{Operation.Lexeme}' to operands of type {leftType} and {rightType}");
     }
+
+    public override string GenerateCode() =>
+        $"{this.LeftExpression.GenerateCode()} {this.Operation.Lexeme} {this.RightExpression.GenerateCode()}";
+
+    public override dynamic Evaluate()
+    {
+        switch (Operation.TokenType)
+        {
+            case TokenType.GreaterThan:
+                return this.LeftExpression.Evaluate() > this.RightExpression.Evaluate();
+            case TokenType.LessThan:
+                return this.LeftExpression.Evaluate() < this.RightExpression.Evaluate();
+            case TokenType.GreaterOrEqualThan:
+                return this.LeftExpression.Evaluate() >= this.RightExpression.Evaluate();
+            case TokenType.LessOrEqualThan:
+                return this.LeftExpression.Evaluate() <= this.RightExpression.Evaluate();
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+    }
 }

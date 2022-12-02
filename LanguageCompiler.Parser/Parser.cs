@@ -38,8 +38,9 @@ namespace LanguageCompiler.Parser
             Decls(ref id);
             var statements = Stmts(id);
             Match(TokenType.CloseBrace);
+            var block = new BlockStatement(statements);
             ContextManager.Pop();
-            return statements;
+            return block;
         }
 
         private Statement Stmts(IdExpression id)
@@ -164,8 +165,9 @@ namespace LanguageCompiler.Parser
             var expr = RelExpr();
             while (this.lookAhead.TokenType == TokenType.Equal || this.lookAhead.TokenType == TokenType.NotEqual)
             {
+                var token = this.lookAhead;
                 Move();
-                expr = new EqualExpression(expr,  RelExpr());
+                expr = new EqualExpression(expr,  RelExpr(), token);
             }
 
             return expr;
@@ -255,8 +257,7 @@ namespace LanguageCompiler.Parser
                     Match(TokenType.LeftBracket);
                     var index = LogicalOrExpr();
                     Match(TokenType.RightBracket);
-                    id.Type =  ((ArrayType)id.GetType()).Of;
-                    return id;
+                    return new ArrayAccessExpression(((ArrayType)id.GetType()).Of, id, index);
             }
 
             return null;
@@ -283,7 +284,7 @@ namespace LanguageCompiler.Parser
                 return new AssignationStatement(id, expression);
             }
             var type = ((ArrayType)id.GetType()).Of;
-            var access = new ArrayAccessExpression(type, this.lookAhead, id, index);
+            var access = new ArrayAccessExpression(type, id, index);
             this.Match(TokenType.SemiColon);
             return new ArrayAssignationStatement(access, expression);
         }

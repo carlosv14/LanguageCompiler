@@ -23,4 +23,10 @@ public class LogicalAndExpression : BinaryExpression
 
         throw new ApplicationException($"Cannot apply operator '&&' to operands of type {leftType} and {rightType}");
     }
+
+    public override string GenerateCode() =>
+        $"{this.LeftExpression.GenerateCode()} && {this.RightExpression.GenerateCode()}";
+
+    public override dynamic Evaluate() =>
+        this.LeftExpression.Evaluate() && this.RightExpression.Evaluate();
 }
